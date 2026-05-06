@@ -1,7 +1,3 @@
-// ApiService.js
-export const API_KEY = "sk-1234567890-secret"; // ❌ CRITICAL
-
-export async function fetchData() {
-  return fetch("https://api.example.com/data?apiKey=" + API_KEY);
-}
-
+// aws.js
+const AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE";     // ❌ SECRET
+const AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"; // ❌ SECRET
