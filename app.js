@@ -1,15 +1,7 @@
-// secret.js
-const AWS_SECRET_KEY = "AKIAIOSFODNN7EXAMPLE";
-const DB_PASSWORD = "SuperSecret123!";
-// eval.js
-const userInput = "console.log('hacked')";
-eval(userInput);
-// command.js
-const { exec } = require("child_process");
+// ApiService.js
+export const API_KEY = "sk-1234567890-secret"; // ❌ CRITICAL
 
-const userInput = "ls; rm -rf /";
-exec(userInput);
-// crypto.js
-const crypto = require("crypto");
+export async function fetchData() {
+  return fetch("https://api.example.com/data?apiKey=" + API_KEY);
+}
 
-crypto.createHash("md5").update("password").digest("hex");
