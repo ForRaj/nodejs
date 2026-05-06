@@ -1,0 +1,52 @@
+name: CodeAnt Quality Gate POC
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quality-gate:
+    name: CodeAnt Quality Gate Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 🔍 Step 1: Run CodeAnt scan
+      - name: Run CodeAnt Scan
+        id: codeant
+        uses: CodeAnt-AI/codeant-quality-gates@v0.0.5
+        with:
+          access_token: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+          api_base: https://api.codeant.ai
+          timeout: 300
+          poll_interval: 15
+
+      # 🧪 Step 2: Enforce Quality Gate (POC requirement)
+      - name: Enforce Quality Gate
+        run: |
+          echo "Applying Quality Gate Rules..."
+
+          # These outputs depend on action response
+          CRITICAL="${{ steps.codeant.outputs.critical }}"
+          HIGH="${{ steps.codeant.outputs.high }}"
+
+          echo "Critical Issues: $CRITICAL"
+          echo "High Issues: $HIGH"
+
+          # Condition 1: No critical allowed
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "❌ Quality Gate Failed: Critical issues found"
+            exit 1
+          fi
+
+          # Condition 2: Max 2 high allowed
+          if [ "$HIGH" -gt 2 ]; then
+            echo "❌ Quality Gate Failed: High issues exceed limit (2)"
+            exit 1
+          fi
+
+          echo "✅ Quality Gate Passed"
